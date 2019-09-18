@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>반응속도 측정</title>
+    <style>
+        div#gameView {
+            width: 100%;
+            height: 500px;
+            font-size: 50px;
+            color: white;
+            text-align: center;
+            user-select: none;
+        }
+
+        div.ready {
+            background-color: #2B87D1;
+        }
+
+        div.wating {
+            background-color: #CE2636;
+        }
+
+        div.start {
+            background-color: #4CDB6A;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameView" class="ready">시작하려면 클릭!</div>
+    <script src="reaction.js"></script>
+</body>
+</html>
