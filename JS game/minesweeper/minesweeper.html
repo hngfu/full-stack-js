@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>지.뢰.찾.기💣</title>
+    <style>
+        td {
+            width: 50px;
+            height: 50px;
+            background-color: #C0C0C0;
+            border-style: solid;
+            border-color: #FFFFFF #808080 #808080 #FFFFFF;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        td.opened {
+            border-color: #C0C0C0;
+        }
+
+        td#boom {
+            border-color: #FF0000;
+            background-color: #FF0000;
+        }
+
+        table {
+            border-collapse: separate;
+            background-color: #808080;
+        }
+
+        #game {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <input type="number" placeholder="세로" id="col" value="10">
+    <input type="number" placeholder="가로" id="row" value="10">
+    <input type="number" placeholder="지뢰개수" id="mine" value="20">
+    <button id="start">Start!</button>
+    <div id="game" draggable="true">
+        <div></div>
+    </div>
+    <h1 id="result"></h1>
+    <script src="minesweeper.js"></script>
+</body>
+</html>
