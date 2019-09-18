@@ -1,80 +1,131 @@
-var body = document.body;
+var board = document.querySelector('.board');
+var boardData;
+var sign = {
+    me: 'X',
+    computer: 'O'
+}
+var playFlag = true;
+var playCnt = 0;
 
-var checkData = [
-    ['', '', ''],
-    ['', '', ''],
-    ['', '', '']
-];
+function makeBoardData() {
+    var boardData = [];
+    for (var i = 0; i < 9; i++) {
+        boardData[i] = '';
+    }
+    return boardData;
+}
 
-var turn = 'X';
-function check(col, row) {
-    var cnt = 0;
+function isSameSign(col, row, sign) {
+    var index = col * 3 + row;
+    return boardData[index] === sign;
+}
+
+function isEnd(col, row, sign) {
+    var check = true;
+
     for (var i = 0; i < 3; i++) {
-        if (checkData[col][i] === turn) {
-            cnt++;
+        if (!isSameSign(col, i, sign)) {
+            check = false;
+            break;
         }
     }
-    if (cnt === 3) return true;
-    else cnt = 0;
+
+    if (check) return true;
+    check = true;
+
     for (var i = 0; i < 3; i++) {
-        if (checkData[i][row] === turn) {
-            cnt++;
+        if (!isSameSign(i, row, sign)) {
+            check = false;
+            break;
         }
     }
-    if (cnt === 3) return true;
-    else cnt = 0;
+
+    if (check) return true;
+    check = true;
+
     if (col === row) {
-        [[0, 0], [1, 1], [2, 2]].forEach(array => {
-            if (checkData[array[0]][array[1]] === turn) {
-                cnt++;
+        for (var i = 0; i < 3; i++) {
+            if (!isSameSign(i, i, sign)) {
+                check = false;
+                break;
             }
-        })
-        if (cnt === 3) return true;
-        else cnt = 0;
+        }
+        if (check) return true;
+        check = true;
     }
+
 
     if (col + row === 2) {
-        [[0, 2], [1, 1], [2, 0]].forEach(array => {
-            if (checkData[array[0]][array[1]] === turn) {
-                cnt++;
+        for (var i = 0; i < 3; i++) {
+            if (!isSameSign(i, 2 - i, sign)) {
+                check = false;
+                break;
             }
-        })
-        if (cnt === 3) return true;
-        else cnt = 0;
+        }
+        return check;
     }
+
     return false;
 }
 
-var result = document.createElement('div');
-var table = document.createElement('table');
-for (var i = 0; i < 3; i++) {
-    var line = document.createElement('tr');
-    table.appendChild(line);
-    for (var j = 0; j < 3; j++) {
-        var room = document.createElement('td');
-        line.appendChild(room);
-        room.addEventListener('click', function () {
-            var line = this.parentElement;
-            if (checkData[line.rowIndex][this.cellIndex] === '') {
-                checkData[line.rowIndex][this.cellIndex] = turn;
-                this.textContent = turn;
-                if (check(line.rowIndex, this.cellIndex)) {
-                    result.textContent = turn + '님의 승리입니다!🥳';
-                    checkData = [
-                        ['', '', ''],
-                        ['', '', ''],
-                        ['', '', '']
-                    ];
-                    table.childNodes.forEach(element => {
-                        element.childNodes.forEach(cell => {
-                            cell.textContent = '';
-                        });
-                    });
-                    turn = 'X';
-                } else turn = (turn === 'X')? 'O' : 'X';
-            }
-        });
-    }
+function showResult(message) {
+    document.querySelector('#result').textContent = message;
 }
-body.appendChild(table);
-body.appendChild(result);
+
+function clearBoard() {
+    Array.from(board.children).forEach(line => {
+        Array.from(line.children).forEach(cell => {
+            cell.textContent = '';
+        })
+    })
+}
+
+function computerTurn() {
+    setTimeout(() => {
+        var flag = true;
+        while (flag) {
+            var col = Math.floor(Math.random() * 3);
+            var row = Math.floor(Math.random() * 3);
+            if (boardData[col * 3 + row] === '') {
+                boardData[col * 3 + row] = sign.computer;
+                board.children[col].children[row].textContent = sign.computer;
+                playCnt++;
+                if (isEnd(col, row, sign.computer)) {
+                    boardData = makeBoardData();
+                    clearBoard();
+                    playCnt = 0;
+                    showResult('zjavbxj가 승리하였습니다😡');
+                }
+                flag = false;
+            }
+            playFlag = true;
+        }
+    }, 1000);
+}
+
+boardData = makeBoardData();
+board.addEventListener('click', e => {
+    var line = e.target.parentNode;
+    var col = Array.from(board.children).indexOf(line);
+    var row = Array.from(line.children).indexOf(e.target);
+    if (boardData[col * 3 + row] === '' && playFlag === true) {
+        boardData[col * 3 + row] = sign.me;
+        board.children[col].children[row].textContent = sign.me;
+        playCnt++;
+        playFlag = false;
+        if (isEnd(col, row, sign.me)) {
+            boardData = makeBoardData();
+            clearBoard();
+            playCnt = 0;
+            showResult('플레이어가 승리하였습니다~!🥳');
+        } else if (playCnt === 9) {
+            boardData = makeBoardData();
+            clearBoard();
+            playCnt = 0;
+            showResult('무.승.부');
+            playFlag = true;
+        } else {
+            computerTurn();
+        }
+    }
+})
