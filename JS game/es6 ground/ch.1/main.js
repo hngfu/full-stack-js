@@ -1,9 +1,10 @@
-const lists = document.querySelectorAll('li');
 
-function print(lists) {
-    return Array.from(lists).filter(e => {
-        return e.textContent.includes('e');
+function print() {
+    const lists = document.querySelectorAll('li');
+    const result = Array.from(lists).filter(e => {
+        return e.innerText.includes('e');
     })
+    console.log(result);
 }
 
-console.log(print(lists));
+print();
