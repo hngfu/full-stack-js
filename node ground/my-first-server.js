@@ -1,8 +1,13 @@
 const http = require('http');
+const fs = require('fs');
 
 http.createServer((req, res) => {
-    res.write('<h1>Hngfu</h1>');
-    res.end('<h2>Hello World</h2>');
-}).listen('8081', () => {
+    fs.readFile('./index.html', (err, data) => {
+        if (err) {
+            throw err;
+        }
+        res.end(data);
+    })
+}).listen(8080, () => {
     console.log('서버가 실행되었습니다.');
 })
