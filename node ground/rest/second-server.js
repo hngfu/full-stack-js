@@ -8,13 +8,13 @@ const server = http.createServer((req, res) => {
         case 'GET':
             if (req.url === '/') {
                 fs.readFile('./rest.html', (err, data) => {
-                    res.end(data);
+                    return res.end(data);
                 });
             } else if (req.url === '/users') {
-                res.end(JSON.stringify(users));
+                return res.end(JSON.stringify(users));
             } else {
                 fs.readFile(`.${req.url}`, (err, data) => {
-                    res.end(data);
+                    return res.end(data);
                 });
             }
             break;
@@ -29,7 +29,7 @@ const server = http.createServer((req, res) => {
                     const id = +new Date();
                     users[id] = name;
                     res.writeHead(201);
-                    res.end();
+                    return res.end();
                 });
             }
             break;
@@ -42,7 +42,7 @@ const server = http.createServer((req, res) => {
                 });
                 req.on('end', () => {
                     users[key] = JSON.parse(body).name;
-                    res.end();
+                    return res.end();
                 });
             }
             break;
@@ -50,7 +50,7 @@ const server = http.createServer((req, res) => {
             if (req.url.startsWith('/users')) {
                 const key = req.url.split('/')[2];
                 delete users[key];
-                res.end();
+                return res.end();
             }
             break;
         default:
